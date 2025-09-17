@@ -1,13 +1,20 @@
 import React from 'react';
-import { ArrowRight, Leaf, Recycle, CheckCircle } from 'lucide-react';
+import { ArrowRight, Leaf, Recycle } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { mockData } from './mock';
 
 const Products = () => {
+  const navigate = useNavigate();
+
   const scrollToSection = (href) => {
     const element = document.querySelector(href);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
+  };
+
+  const handleProductClick = (productId) => {
+    navigate(`/product/${productId}`);
   };
 
   return (
@@ -18,8 +25,7 @@ const Products = () => {
             Our Eco-Products
           </h2>
           <p className="body-large max-w-2xl mx-auto" style={{ color: 'var(--text-secondary)' }}>
-            Innovative solutions that transform how we think about urban sustainability, 
-            one product at a time.
+            Innovative solutions that transform how we think about urban sustainability.
           </p>
         </div>
 
@@ -48,23 +54,12 @@ const Products = () => {
                 {product.name}
               </h3>
               
-              <p className="body-medium mb-4" style={{ color: 'var(--text-secondary)' }}>
+              <p className="body-medium mb-6" style={{ color: 'var(--text-secondary)' }}>
                 {product.description}
               </p>
 
-              <div className="space-y-2 mb-6">
-                {product.features.map((feature, index) => (
-                  <div key={index} className="flex items-start gap-2">
-                    <CheckCircle size={16} className="mt-1 flex-shrink-0" style={{ color: 'var(--accent-primary)' }} />
-                    <span className="body-small">
-                      {feature}
-                    </span>
-                  </div>
-                ))}
-              </div>
-
               <button 
-                onClick={() => scrollToSection('#contact')}
+                onClick={() => handleProductClick(product.id)}
                 className="btn-primary w-full btn-hover-scale flex items-center justify-center gap-2"
               >
                 Learn More
