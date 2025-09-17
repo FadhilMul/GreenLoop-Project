@@ -44,20 +44,6 @@ const Hero = () => {
             {mockData.hero.secondaryCTA}
           </button>
         </div>
-
-        {/* Stats Grid */}
-        <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 max-w-2xl mx-auto">
-          {mockData.stats.map((stat, index) => (
-            <div key={index} className="text-center">
-              <div className="heading-2 text-accent-text mb-1">
-                {stat.number}
-              </div>
-              <div className="body-small">
-                {stat.label}
-              </div>
-            </div>
-          ))}
-        </div>
       </div>
 
       {/* Background Image Overlay */}
