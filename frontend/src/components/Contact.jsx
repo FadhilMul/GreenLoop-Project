@@ -92,7 +92,15 @@ const Contact = () => {
           {/* Contact Form */}
           <div className="bg-white rounded-lg p-8 shadow-sm">
             {!isSubmitted ? (
+            {!isSubmitted ? (
               <form onSubmit={handleSubmit} className="space-y-6">
+                {error && (
+                  <div className="flex items-center gap-2 p-4 bg-red-50 border border-red-200 rounded-lg">
+                    <AlertCircle size={20} className="text-red-600 flex-shrink-0" />
+                    <p className="body-small text-red-800">{error}</p>
+                  </div>
+                )}
+
                 <div>
                   <label htmlFor="name" className="block body-medium font-semibold mb-2">
                     Full Name *
@@ -104,7 +112,8 @@ const Contact = () => {
                     required
                     value={formData.name}
                     onChange={handleInputChange}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
+                    disabled={isLoading}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     placeholder="Enter your full name"
                   />
                 </div>
@@ -120,7 +129,8 @@ const Contact = () => {
                     required
                     value={formData.email}
                     onChange={handleInputChange}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
+                    disabled={isLoading}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     placeholder="Enter your email address"
                   />
                 </div>
@@ -135,7 +145,8 @@ const Contact = () => {
                     name="organization"
                     value={formData.organization}
                     onChange={handleInputChange}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
+                    disabled={isLoading}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     placeholder="Enter your organization (optional)"
                   />
                 </div>
@@ -149,7 +160,8 @@ const Contact = () => {
                     name="interest"
                     value={formData.interest}
                     onChange={handleInputChange}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
+                    disabled={isLoading}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <option value="">Select an option</option>
                     <option value="Learning about products">Learning about products</option>
@@ -172,17 +184,28 @@ const Contact = () => {
                     rows={5}
                     value={formData.message}
                     onChange={handleInputChange}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors resize-vertical"
+                    disabled={isLoading}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors resize-vertical disabled:opacity-50 disabled:cursor-not-allowed"
                     placeholder="Tell us about your interest in our project..."
                   />
                 </div>
 
                 <button
                   type="submit"
-                  className="btn-primary w-full btn-hover-scale flex items-center justify-center gap-2"
+                  disabled={isLoading}
+                  className="btn-primary w-full btn-hover-scale flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:hover:transform-none"
                 >
-                  <Send size={20} />
-                  Send Message
+                  {isLoading ? (
+                    <>
+                      <Loader size={20} className="animate-spin" />
+                      Sending...
+                    </>
+                  ) : (
+                    <>
+                      <Send size={20} />
+                      Send Message
+                    </>
+                  )}
                 </button>
               </form>
             ) : (
