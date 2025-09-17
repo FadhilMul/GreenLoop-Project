@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Play, Download, ExternalLink, Leaf, Recycle, CheckCircle } from 'lucide-react';
+import { ArrowLeft, Play, Share2, Mail, Leaf, Recycle, CheckCircle } from 'lucide-react';
 import { mockData } from './mock';
 
 const ProductDetail = () => {
@@ -29,6 +29,24 @@ const ProductDetail = () => {
     { id: 'videos', label: 'Video Gallery' },
     { id: 'howto', label: 'How-to Guide' }
   ];
+
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: product.name,
+        text: product.description,
+        url: window.location.href,
+      });
+    } else {
+      // Fallback for browsers that don't support Web Share API
+      navigator.clipboard.writeText(window.location.href);
+      alert('Product link copied to clipboard!');
+    }
+  };
+
+  const handleContact = () => {
+    navigate('/#contact');
+  };
 
   // Mock data for galleries and guides
   const photoGallery = [
@@ -60,14 +78,15 @@ const ProductDetail = () => {
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-40">
+      <header className="bg-white border-b border-gray-200 fixed top-0 left-0 right-0 z-40">
         <div className="container py-4">
           <div className="flex items-center justify-between">
             <button 
               onClick={() => navigate('/')}
-              className="flex items-center gap-2 btn-secondary"
+              className="text-sm hover:text-green-600 transition-colors flex items-center gap-1"
+              style={{ color: 'var(--text-secondary)' }}
             >
-              <ArrowLeft size={20} />
+              <ArrowLeft size={16} />
               Back to Home
             </button>
             <div className="flex items-center gap-2">
@@ -84,24 +103,26 @@ const ProductDetail = () => {
       </header>
 
       {/* Hero Section */}
-      <section className="section-padding bg-section">
+      <section className="section-padding bg-section mt-16">
         <div className="container">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <h1 className="heading-1 mb-6">{product.name}</h1>
               <p className="body-large mb-6">{product.description}</p>
-              <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex gap-6">
                 <button 
-                  onClick={() => navigate('/#contact')}
-                  className="btn-primary btn-hover-scale"
+                  onClick={handleContact}
+                  className="text-green-600 hover:text-green-700 transition-colors flex items-center gap-2 font-medium"
                 >
-                  Get in Touch
+                  <Mail size={20} />
+                  Contact Us
                 </button>
                 <button 
-                  onClick={() => setActiveTab('howto')}
-                  className="btn-secondary btn-hover-scale"
+                  onClick={handleShare}
+                  className="text-gray-600 hover:text-gray-700 transition-colors flex items-center gap-2 font-medium"
                 >
-                  How to Use
+                  <Share2 size={20} />
+                  Share Product
                 </button>
               </div>
             </div>
