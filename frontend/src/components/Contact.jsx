@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
-import { Send, MapPin, Mail, Phone, Instagram, Facebook, Twitter, Linkedin, Youtube, CheckCircle } from 'lucide-react';
+import { Send, MapPin, Mail, Phone, Instagram, Facebook, Twitter, Linkedin, Youtube, CheckCircle, AlertCircle, Loader } from 'lucide-react';
+import axios from 'axios';
 import { mockData } from './mock';
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const API = `${BACKEND_URL}/api`;
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -11,6 +15,8 @@ const Contact = () => {
     message: ''
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -18,25 +24,48 @@ const Contact = () => {
       ...prev,
       [name]: value
     }));
+    // Clear error when user starts typing
+    if (error) {
+      setError(null);
+    }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Mock form submission
-    console.log('Form submitted:', formData);
-    setIsSubmitted(true);
-    
-    // Reset form after 3 seconds
-    setTimeout(() => {
-      setIsSubmitted(false);
-      setFormData({
-        name: '',
-        email: '',
-        organization: '',
-        interest: '',
-        message: ''
-      });
-    }, 3000);
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const response = await axios.post(`${API}/contact`, formData);
+      
+      if (response.data.success) {
+        setIsSubmitted(true);
+        // Reset form after 5 seconds
+        setTimeout(() => {
+          setIsSubmitted(false);
+          setFormData({
+            name: '',
+            email: '',
+            organization: '',
+            interest: '',
+            message: ''
+          });
+        }, 5000);
+      }
+    } catch (err) {
+      console.error('Form submission error:', err);
+      
+      if (err.response?.data?.message) {
+        setError(err.response.data.message);
+      } else if (err.response?.data?.errors) {
+        const errorMessages = Object.values(err.response.data.errors).flat();
+        setError(errorMessages.join('. '));
+      } else {
+        setError('An error occurred while sending your message. Please try again.');
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const socialIconMap = {
