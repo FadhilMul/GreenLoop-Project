@@ -92,7 +92,6 @@ const Contact = () => {
           {/* Contact Form */}
           <div className="bg-white rounded-lg p-8 shadow-sm">
             {!isSubmitted ? (
-            {!isSubmitted ? (
               <form onSubmit={handleSubmit} className="space-y-6">
                 {error && (
                   <div className="flex items-center gap-2 p-4 bg-red-50 border border-red-200 rounded-lg">
